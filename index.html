@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta de Presentación Digital - Dra. Carolina Diaz</title>
+    <!-- Tailwind CSS para estilos rápidos y modernos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para una tipografía elegante -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para íconos realistas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Alpine.js para interactividad ligera (modal) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .icon-shadow {
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+        }
+        .interactive-element {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .interactive-element:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.15);
+        }
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        /* Staggered animation for icons */
+        .icon-animate {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        /* Animación de encendido y apagado (Pulsación Neón / Parpadeo) */
+        @keyframes pulseGlow {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 15px rgba(20, 184, 166, 0.9), 0 0 25px rgba(249, 115, 22, 0.8);
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.65;
+                box-shadow: 0 0 5px rgba(20, 184, 166, 0.4);
+                transform: scale(0.98);
+            }
+        }
+        .pulse-effect {
+            animation: pulseGlow 1.5s infinite ease-in-out;
+        }
+        /* Evita el scroll del body cuando el modal está abierto */
+        body.modal-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-200">
+
+    <div class="w-full min-h-screen flex items-center justify-center md:p-4">
+        <div x-data="appData()" x-init="init()" x-watch="qrModal || servicesModal || scheduleModal || installModal || calendarModal || timePickerModal || aboutModal, value => { document.body.classList.toggle('modal-open', value) }" class="w-full h-screen overflow-y-auto md:h-auto md:max-w-sm bg-slate-50 md:shadow-2xl md:rounded-2xl md:overflow-hidden fade-in">
+
+            <!-- Sección del Banner Superior -->
+            <div class="relative h-44 bg-cover bg-center" style="background-image: url('https://i.postimg.cc/fyVWnrSh/Whats-App-Image-2026-10-21-at-8-21-52-AM.jpg');">
+                <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+            </div>
+
+            <!-- Sección de Foto de Perfil -->
+            <div class="flex justify-center -mt-20 z-10 relative">
+                <div class="relative">
+                    <img class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg" src="https://i.postimg.cc/fyVWnrSh/Whats-App-Image-2026-10-21-at-8-21-52-AM.jpg" alt="Foto de perfil de la Dra. Ana Pérez" onerror="this.onerror=null;this.src='https://placehold.co/128x128/EFEFEF/333333?text=AP';">
+                    <div class="absolute bottom-1 right-1 bg-emerald-600 rounded-full w-8 h-8 flex items-center justify-center border-2 border-white">
+                        <i class="fa-solid fa-check text-white text-sm"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Información -->
+            <div class="text-center px-6 pt-4 pb-2">
+                <h2 class="text-3xl font-bold text-[#0a192f]">Lucía Carolina Vargas</h2>
+                <p class="text-gray-500 font-medium">Organizadora de Prana</p>
+                <p class="text-sm text-teal-600 mt-2 italic font-medium">"El arte de crear con las manos y dar vida a las ideas con el corazón."</p>
+            </div>
+
+            <!-- Sección de Iconos Interactivos -->
+            <div class="px-6 pt-6 pb-4">
+                <div class="grid grid-cols-3 gap-y-6 gap-x-5">
+                     <!-- Ubicación -->
+                    <a href="https://maps.app.goo.gl/f8K8NoUaUD65dWd1A" target="_blank" class="flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.1s;" title="Ver Ubicación">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-solid fa-location-dot fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">Ubicación</p>
+                    </a>
+                    <!-- Horario -->
+                    <div @click="scheduleModal = true" class="cursor-pointer flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.2s;" title="Ver Horario de Atención">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-solid fa-clock fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">Horario</p>
+                    </div>
+                    <!-- Quiénes Somos -->
+                    <div @click="aboutModal = true" class="cursor-pointer flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.3s;" title="Conoce más sobre nosotros">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-solid fa-users fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">Quiénes Somos</p>
+                    </div>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/luciacarolina.vargas" target="_blank" class="flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.4s;" title="Sígueme en Facebook">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-brands fa-facebook-f fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">Facebook</p>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/elrincondecarola/" target="_blank" class="flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.5s;" title="Sígueme en Instagram">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-brands fa-instagram fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">Instagram</p>
+                    </a>
+                    <!-- TikTok -->
+                    <a href="https://vt.tiktok.com/ZSgDdyDhW/" target="_blank" class="flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.6s;" title="Sígueme en TikTok">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-brands fa-tiktok fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">TikTok</p>
+                    </a>
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/5493874575301" target="_blank" class="flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.7s;" title="Chatea por WhatsApp">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-brands fa-whatsapp fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">WhatsApp</p>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://youtube.com/shorts/7KfSNiGmQcA?si=mWRZLdlZ1dx8R-Q_" target="_blank" class="flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.8s;" title="Visita mi canal de YouTube">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-brands fa-youtube fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">YouTube</p>
+                    </a>
+                    <!-- Instalar -->
+                    <div @click="installModal = true" class="cursor-pointer flex flex-col items-center text-center group interactive-element icon-animate" style="animation-delay: 0.9s;" title="Cómo Instalar en tu Dispositivo">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-orange-500 text-white flex items-center justify-center icon-shadow"><i class="fa-solid fa-mobile-screen-button fa-2x"></i></div>
+                        <p class="text-sm font-medium text-gray-600 mt-2">Instalar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="px-6 py-6 space-y-4">
+                 <a href="tel:+5493874575301" class="block w-full bg-gradient-to-r from-teal-500 via-teal-400 to-orange-500 hover:from-teal-600 hover:to-orange-600 text-blue-900 font-black py-4 px-4 rounded-xl text-center interactive-element uppercase tracking-widest text-lg pulse-effect flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-phone-flip text-xl text-blue-900"></i>
+                    <span class="text-blue-900">LLAMAR</span>
+                 </a>
+                 <div class="flex gap-4">
+                    <button onclick="downloadVCard()" class="flex-1 bg-gradient-to-r from-teal-500 to-orange-500 hover:from-teal-600 hover:to-orange-600 text-white font-bold py-3 px-4 rounded-lg text-center interactive-element flex items-center justify-center gap-2 shadow-md"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Guardar Contacto</button>
+                    <button @click="qrModal = true" class="w-1/3 bg-gradient-to-r from-teal-500 to-orange-500 hover:from-teal-600 hover:to-orange-600 text-white font-bold py-3 px-4 rounded-lg text-center interactive-element flex items-center justify-center gap-2 shadow-md"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>QR</button>
+                </div>
+            </div>
+            
+            <!-- MODALS -->
+
+            <!-- Modal Quiénes Somos -->
+            <div x-show="aboutModal" @keydown.escape.window="aboutModal = false" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" x-transition.opacity style="display: none;">
+                <div @click.away="aboutModal = false" class="bg-slate-50 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col border-2 border-teal-500 overflow-hidden" x-transition.scale>
+                    <div class="bg-gradient-to-r from-teal-500 to-orange-500 text-white p-5 text-center">
+                        <h3 class="text-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-users"></i> Quiénes Somos</h3>
+                        <p class="text-xs text-white/90 mt-1 font-semibold">Bienvenidos a Convención Prana</p>
+                    </div>
+                    <div class="p-6 overflow-y-auto space-y-4 text-gray-700 text-sm flex-grow">
+                        <p class="leading-relaxed font-medium text-gray-800">
+                            <strong>Convención Prana</strong> es el punto de encuentro definitivo para los apasionados del arte, el diseño y las manualidades. Somos una comunidad vibrante de creadores, artesanos, emprendedores y aficionados que creemos en el poder transformador de la imaginación y el trabajo con las manos.
+                        </p>
+                        
+                        <div class="bg-teal-50 p-4 rounded-xl border border-teal-200">
+                            <h4 class="font-bold text-teal-800 text-base mb-1 flex items-center gap-2"><i class="fa-solid fa-palette"></i> ¿Quiénes somos?</h4>
+                            <p class="text-xs text-teal-950 leading-relaxed">Somos un colectivo apasionado que entiende el arte y las manualidades no solo como un pasatiempo, sino como una forma de vida. Nos mueven la curiosidad, el talento local y el deseo de compartir conocimientos que inspiren a otros a materializar sus ideas.</p>
+                        </div>
+
+                        <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
+                            <h4 class="font-bold text-orange-800 text-base mb-1 flex items-center gap-2"><i class="fa-solid fa-hands-holding-circle"></i> ¿Por qué nos reunimos?</h4>
+                            <p class="text-xs text-orange-950 leading-relaxed">Nos reunimos para celebrar la creatividad en todas sus expresiones. Este espacio nace de la necesidad de conectar de forma presencial, compartir técnicas, descubrir nuevas tendencias, apoyar el talento emergente y fortalecer el mercado del hágalo usted mismo. Queremos que cada asistente encuentre un entorno seguro y estimulante para aprender y crecer.</p>
+                        </div>
+
+                        <div class="bg-slate-100 p-4 rounded-xl border border-slate-300">
+                            <h4 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-bullseye"></i> ¿Qué buscamos?</h4>
+                            <ul class="list-disc list-inside text-xs text-slate-700 space-y-1.5 leading-relaxed">
+                                <li>Inspirar a personas de todas las edades a explorar su potencial creativo.</li>
+                                <li>Impulsar a los emprendedores del sector brindándoles una plataforma de visibilidad.</li>
+                                <li>Aprender juntos a través de talleres, demostraciones en vivo y experiencias compartidas.</li>
+                                <li>Crear lazos fuertes dentro de la comunidad artística y de manualidades.</li>
+                            </ul>
+                        </div>
+
+                        <p class="text-xs text-gray-600 italic text-center pt-2">
+                            En este espacio, cada idea cuenta y cada mano creadora aporta una chispa única a nuestro gran motor creativo. Porque la energía de este evento la construyes tú con tu presencia, tus proyectos y tu pasión.
+                        </p>
+                        
+                        <div class="text-center font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-orange-500 text-lg tracking-wider pt-1">
+                            ¡JUNTOS SOMOS PRANA!
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-center">
+                        <button @click="aboutModal = false" class="bg-gradient-to-r from-teal-500 to-orange-500 text-white font-bold py-2.5 px-6 rounded-lg w-full hover:opacity-90 transition-opacity">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal del Código QR -->
+            <div x-show="qrModal" @keydown.escape.window="qrModal = false" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" x-transition.opacity style="display: none;">
+                <div @click.away="qrModal = false" class="bg-slate-50 rounded-lg shadow-2xl text-center border-2 border-emerald-500 overflow-hidden" x-transition.scale>
+                    <div class="bg-emerald-600 text-white p-4">
+                        <h3 class="text-xl font-bold">Escanea para Compartir</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 text-sm mb-4">
+                            ¿Quieres compartir mi contacto fácilmente? ¡Solo escanea este código con la cámara de tu teléfono! Es la forma más rápida de tener mis datos siempre a mano.
+                        </p>
+                        <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com" alt="QR Code" class="mx-auto">
+                        <div class="mt-6 flex justify-center">
+                            <button @click="qrModal = false" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 transition-colors">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Horario de Atención -->
+            <div x-show="scheduleModal" @keydown.escape.window="scheduleModal = false" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" x-transition.opacity style="display: none;">
+                <div @click.away="scheduleModal = false" class="bg-slate-50 rounded-2xl shadow-2xl w-full max-w-sm text-center border-2 border-teal-500 overflow-hidden" x-transition.scale>
+                    <div class="bg-gradient-to-r from-teal-500 to-orange-500 text-white p-4">
+                        <h3 class="text-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-days"></i> Fecha del Evento</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4 text-gray-700">
+                            <div class="bg-teal-50 p-4 rounded-xl border border-teal-200">
+                                <p class="text-xs text-teal-800 font-semibold uppercase tracking-wider mb-1">Próxima Edición</p>
+                                <p class="text-2xl font-bold text-teal-900">21 y 22 de Noviembre de 2026</p>
+                                <p class="text-base font-semibold text-teal-800 mt-2"><i class="fa-regular fa-clock mr-1"></i> De 10 a 20 hs</p>
+                            </div>
+                            <div class="bg-orange-50 p-3 rounded-xl border border-orange-200 text-orange-900 font-semibold text-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-circle-check text-orange-500"></i>
+                                <span>Entrada y estacionamiento gratuito</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-center">
+                            <button @click="scheduleModal = false" class="bg-gradient-to-r from-teal-500 to-orange-500 text-white font-bold py-2.5 px-6 rounded-lg w-full hover:opacity-90 transition-opacity">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Instalación -->
+            <div x-show="installModal" @keydown.escape.window="installModal = false" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" x-transition.opacity style="display: none;">
+                <div @click.away="installModal = false" class="bg-slate-50 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col border-2 border-emerald-500 overflow-hidden" x-transition.scale>
+                    <div class="bg-emerald-600 text-white p-6 text-center">
+                        <h3 class="text-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-download"></i> Instala en tu Dispositivo</h3>
+                        <p class="text-emerald-100 text-sm mt-1">Accede a mi tarjeta con un solo toque, como si fuera una app. ¡Es rápido, fácil y no ocupa espacio!</p>
+                    </div>
+                    <div class="p-6 overflow-y-auto space-y-5 pr-2 flex-grow">
+                        <div class="p-4 bg-white rounded-lg"><h4 class="font-bold text-lg text-gray-800 flex items-center gap-2 mb-2"><i class="fa-brands fa-apple"></i> Para iPhone (iOS)</h4><ol class="list-decimal list-inside text-gray-600 space-y-1 text-sm"><li>Abre esta tarjeta en el navegador <strong>Safari</strong>.</li><li>Toca el ícono de <strong>Compartir</strong> (un cuadro con una flecha hacia arriba).</li><li>Busca y selecciona la opción <strong>"Agregar a la pantalla de inicio"</strong>.</li><li>Confirma el nombre y ¡listo!</li></ol></div>
+                        <div class="p-4 bg-white rounded-lg"><h4 class="font-bold text-lg text-gray-800 flex items-center gap-2 mb-2"><i class="fa-brands fa-android"></i> Para Android</h4><ol class="list-decimal list-inside text-gray-600 space-y-1 text-sm"><li>Abre esta tarjeta en el navegador <strong>Chrome</strong>.</li><li>Toca el menú de los <strong>tres puntos</strong> (&#8942;) en la esquina superior derecha.</li><li>Busca y selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li><li>Sigue los pasos y ¡listo!</li></ol></div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-center">
+                        <button @click="installModal = false" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg w-full sm:w-auto hover:bg-emerald-700 transition-colors">Entendido</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Calendario para Citas -->
+            <div x-show="calendarModal" @keydown.escape.window="calendarModal = false" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" x-transition.opacity style="display: none;">
+                <div @click.away="calendarModal = false" class="bg-slate-50 rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] flex flex-col border-2 border-emerald-500 overflow-hidden" x-transition.scale>
+                    <div class="bg-emerald-600 text-white p-4 text-center">
+                        <h3 class="text-xl sm:text-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-check"></i> Selecciona el Día</h3>
+                        <p class="text-emerald-100 text-sm mt-1">Elige una fecha para ver los horarios</p>
+                    </div>
+                    <div class="p-4 sm:p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <button @click="previousMonth()" class="p-2 rounded-full hover:bg-gray-100"><i class="fa-solid fa-chevron-left"></i></button>
+                            <h4 class="font-semibold text-lg" x-text="`${monthNames[currentMonth]} ${currentYear}`"></h4>
+                            <button @click="nextMonth()" class="p-2 rounded-full hover:bg-gray-100"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 text-center text-xs sm:text-sm text-gray-500 mb-2">
+                            <template x-for="(dayName, index) in dayNames" :key="index">
+                                <div x-text="dayName"></div>
+                            </template>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1">
+                            <template x-for="day in calendarDays" :key="day.id">
+                                <div class="text-center text-sm py-1.5 sm:py-2">
+                                    <button x-show="day.date" 
+                                            @click="selectDate(day)" 
+                                            :class="{
+                                                'bg-emerald-600 text-white': day.isSelected,
+                                                'text-gray-800 hover:bg-gray-100': !day.isSelected && !day.isPast && !day.isSunday,
+                                                'text-gray-400 cursor-not-allowed': day.isPast || day.isSunday,
+                                                'ring-2 ring-emerald-500': day.isToday && !day.isSelected
+                                            }" 
+                                            class="w-8 h-8 sm:w-9 sm:h-9 rounded-full transition-colors" 
+                                            :disabled="day.isPast || day.isSunday">
+                                        <span x-text="day.date"></span>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="mt-4 flex flex-col sm:flex-row gap-2">
+                            <button @click="calendarModal = false" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg transition-colors">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Selección de Hora -->
+            <div x-show="timePickerModal" @keydown.escape.window="timePickerModal = false" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[51] p-4" x-transition.opacity style="display: none;">
+                <div @click.away="timePickerModal = false" class="bg-slate-50 rounded-2xl shadow-2xl w-full max-w-sm max-h-[90vh] flex flex-col border-2 border-emerald-500 overflow-hidden" x-transition.scale>
+                    <div class="bg-emerald-600 text-white p-6 text-center">
+                        <h3 class="text-xl font-bold">Selecciona una Hora</h3>
+                        <p class="text-emerald-100 text-sm" x-text="`Para el ${selectedDate?.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}`"></p>
+                    </div>
+                    <div class="p-6 overflow-y-auto flex-grow">
+                        <div class="grid grid-cols-3 gap-3 text-center">
+                            <template x-if="availableTimes.length > 0">
+                                <template x-for="time in availableTimes" :key="time">
+                                    <button @click="selectedTime = time" :class="selectedTime === time ? 'bg-emerald-600 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'" class="py-3 px-2 rounded-lg text-sm font-medium transition-all duration-200 ease-in-out transform hover:scale-105">
+                                        <span x-text="time"></span>
+                                    </button>
+                                </template>
+                            </template>
+                            <template x-if="availableTimes.length === 0 && selectedDate">
+                                <p class="col-span-full text-gray-500 text-sm py-4">No hay horas disponibles para este día.</p>
+                            </template>
+                        </div>
+                    </div>
+                     <div class="p-6 pt-0 flex flex-col sm:flex-row gap-2">
+                        <button @click="timePickerModal = false" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">Volver</button>
+                        <button @click="confirmAppointment()" :disabled="!selectedTime" :class="!selectedTime ? 'bg-emerald-300 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'" class="w-full text-white font-bold py-2 px-4 rounded-lg transition-colors">Confirmar Cita</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function appData() {
+            return {
+                qrModal: false,
+                servicesModal: false,
+                scheduleModal: false,
+                installModal: false,
+                calendarModal: false,
+                timePickerModal: false,
+                aboutModal: false,
+
+                // Calendar properties
+                currentMonth: new Date().getMonth(),
+                currentYear: new Date().getFullYear(),
+                selectedDate: null,
+                selectedTime: null,
+                calendarDays: [],
+                monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                dayNames: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+
+                // Calendar init
+                init() {
+                    this.generateCalendarDays();
+                },
+
+                // Calendar methods
+                generateCalendarDays() {
+                    const firstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
+                    const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    let days = [];
+                    for (let i = 0; i < firstDay; i++) {
+                        days.push({ id: `empty-${i}` });
+                    }
+
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const date = new Date(this.currentYear, this.currentMonth, i);
+                        const isPast = date < today;
+                        const isToday = date.getTime() === today.getTime();
+                        const isSunday = date.getDay() === 0;
+                        
+                        days.push({
+                            id: `day-${i}`,
+                            date: i,
+                            isToday,
+                            isPast,
+                            isSunday,
+                            isSelected: this.selectedDate && this.selectedDate.getTime() === date.getTime(),
+                        });
+                    }
+                    this.calendarDays = days;
+                },
+                
+                selectDate(day) {
+                    if (day.isPast || day.isSunday) return;
+                    this.selectedDate = new Date(this.currentYear, this.currentMonth, day.date);
+                    this.selectedTime = null;
+                    this.generateCalendarDays(); // To update visual selection
+                    this.timePickerModal = true; // Open the new modal
+                },
+
+                previousMonth() {
+                    if (this.currentMonth === 0) {
+                        this.currentMonth = 11;
+                        this.currentYear--;
+                    } else {
+                        this.currentMonth--;
+                    }
+                    this.generateCalendarDays();
+                },
+
+                nextMonth() {
+                    if (this.currentMonth === 11) {
+                        this.currentMonth = 0;
+                        this.currentYear++;
+                    } else {
+                        this.currentMonth++;
+                    }
+                    this.generateCalendarDays();
+                },
+
+                confirmAppointment() {
+                    if (!this.selectedDate || !this.selectedTime) return;
+                    // In a real application, you would send the data to a server here.
+                    console.log(`Cita confirmada para el ${this.selectedDate.toLocaleDateString('es-ES')} a las ${this.selectedTime}.`);
+                    
+                    // Close all modals
+                    this.timePickerModal = false;
+                    this.calendarModal = false;
+
+                    // Reset state
+                    this.selectedDate = null;
+                    this.selectedTime = null;
+                    this.generateCalendarDays();
+                },
+                
+                // Calendar getter
+                get availableTimes() {
+                    if (!this.selectedDate) return [];
+                    
+                    const dayOfWeek = this.selectedDate.getDay();
+                    if (dayOfWeek === 0) return []; // Domingo
+
+                    let times = [];
+                    const startTime = 9;
+                    const endTime = (dayOfWeek === 6) ? 13 : 18; // Sábado hasta la 1pm, resto hasta las 6pm
+
+                    for (let hour = startTime; hour < endTime; hour++) {
+                        times.push(`${hour}:00`);
+                        times.push(`${hour}:30`);
+                    }
+                    return times;
+                }
+            }
+        }
+
+        function downloadVCard() {
+            const contact = {
+                name: 'Vargas', firstName: 'Lucía Carolina', title: 'Organizadora de Prana',
+                phone: '+5493874575301', email: 'contacto@convencionprana.com', website: 'https://www.facebook.com/luciacarolina.vargas'
+            };
+            const vCard = `BEGIN:VCARD\nVERSION:3.0\nN:${contact.name};${contact.firstName};;;\nFN:${contact.firstName} ${contact.name}\nTITLE:${contact.title}\nTEL;TYPE=WORK,VOICE:${contact.phone}\nEMAIL:${contact.email}\nURL:${contact.website}\nEND:VCARD`;
+            const blob = new Blob([vCard], { type: 'text/vcard;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'LuciaCarolinaVargas.vcf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const qrImg = document.getElementById('qrCodeImg');
+            if(qrImg) {
+                const currentUrl = window.location.href.startsWith('http') ? window.location.href : 'https://example.com/digital-card';
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+            }
+        });
+    </script>
+</body>
+</html>
